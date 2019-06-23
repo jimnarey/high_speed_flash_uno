@@ -39,7 +39,7 @@
 U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE); // Just for 0.91”(128*32)
 // U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE|U8G_I2C_OPT_DEV_0);// for 0.96” and 1.3”
 
-int flashDuration = 500;
+int flashDuration = 100;
 int maxFlashDuration = 10000;
 int minFlashDuration = 100;
 int increment = 100;
@@ -110,8 +110,14 @@ bool notMinDuration(void) {
 
 void testFireFlash(int flashDuration) {
     digitalWrite(triggerPin, HIGH);
-    delay(flashDuration);
+    asm("nop");
+    asm("nop");
+    asm("nop");
+    asm("nop");
+    asm("nop");
+    // delay(flashDuration);
     digitalWrite(triggerPin, LOW);
+    delay(2000);
 }
 
 bool testButtonPressed(void) {
