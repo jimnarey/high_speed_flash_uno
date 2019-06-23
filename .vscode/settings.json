@@ -1,0 +1,6 @@
+{
+    "terminal.integrated.env.osx": {
+        "PATH": "/Users/jimnarey/.platformio/penv/bin:/Users/jimnarey/.platformio/penv:/Users/jimnarey/.rbenv/shims:/Users/jimnarey/.nvm/versions/node/v10.14.1/bin:/Users/jimnarey/Library/Android/sdk/platform-tools:/Users/jimnarey/Library/Android/sdk/tools:/Users/jimnarey/Library/Android/sdk/tools/bin:/Users/jimnarey/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS",
+        "PLATFORMIO_CALLER": "vscode"
+    }
+}
