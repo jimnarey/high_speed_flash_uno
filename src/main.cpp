@@ -39,16 +39,22 @@
 U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE); // Just for 0.91”(128*32)
 // U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE|U8G_I2C_OPT_DEV_0);// for 0.96” and 1.3”
 
-int flashDuration = 50;
-int maxFlashDuration = 100;
-int minFlashDuration = 1; 
+int flashDuration = 500;
+int maxFlashDuration = 10000;
+int minFlashDuration = 100;
+int increment = 100;
+int flashTestPin = 11;
+int increaseDurationPin = 10;
+int decreaseDurationPin = 9;
+int triggerPin = 3;
 
 void setup ()
 {
   Serial.begin(9600);
-  pinMode(11, INPUT);
-  pinMode(10, INPUT);
-  pinMode(9, INPUT);
+  pinMode(flashTestPin, INPUT);
+  pinMode(increaseDurationPin, INPUT);
+  pinMode(decreaseDurationPin, INPUT);
+  pinMode(triggerPin, OUTPUT);
 
   if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
     u8g.setColorIndex(255);     // white
@@ -71,7 +77,7 @@ void writeDisplay(int flashDuration) {
 }
 
 bool increaseDuration(void) {
-    if(digitalRead(10) == 0) {
+    if(digitalRead(increaseDurationPin) == 0) {
         return true;
     } else {
         return false;
@@ -79,7 +85,7 @@ bool increaseDuration(void) {
 }
 
 bool decreaseDuration(void) {
-    if(digitalRead(9) == 0) {
+    if(digitalRead(decreaseDurationPin) == 0) {
         return true;
     } else {
         return false;
@@ -102,12 +108,30 @@ bool notMinDuration(void) {
     }
 }
 
+void testFireFlash(int flashDuration) {
+    digitalWrite(triggerPin, HIGH);
+    delay(flashDuration);
+    digitalWrite(triggerPin, LOW);
+}
+
+bool testButtonPressed(void) {
+    if(digitalRead(flashTestPin) == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void loop ()
 {
   if(increaseDuration() && notMaxDuration()) {
-      flashDuration ++;
+      flashDuration += increment;
   } else if(decreaseDuration() && notMinDuration()) {
-      flashDuration --;
+      flashDuration -= increment;
+  }
+
+  if(testButtonPressed()) {
+      testFireFlash(flashDuration);
   }
 
   u8g.firstPage();  
