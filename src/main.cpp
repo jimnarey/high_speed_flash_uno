@@ -43,17 +43,20 @@ int flashDuration = 100;
 int maxFlashDuration = 10000;
 int minFlashDuration = 100;
 int increment = 100;
-int flashTestPin = 11;
-int increaseDurationPin = 10;
-int decreaseDurationPin = 9;
+
+
+int scrollUp = 11;
+int scrollDown = 12;
+int increaseValuePin = 10;
+int decreaseValuePin = 9;
 int triggerPin = 3;
 
 void setup ()
 {
   Serial.begin(9600);
-  pinMode(flashTestPin, INPUT);
-  pinMode(increaseDurationPin, INPUT);
-  pinMode(decreaseDurationPin, INPUT);
+  pinMode(scrollUp, INPUT);
+  pinMode(increaseValuePin, INPUT);
+  pinMode(decreaseValuePin, INPUT);
   pinMode(triggerPin, OUTPUT);
 
   if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
@@ -77,7 +80,7 @@ void writeDisplay(int flashDuration) {
 }
 
 bool increaseDuration(void) {
-    if(digitalRead(increaseDurationPin) == 0) {
+    if(digitalRead(increaseValuePin) == 0) {
         return true;
     } else {
         return false;
@@ -85,7 +88,7 @@ bool increaseDuration(void) {
 }
 
 bool decreaseDuration(void) {
-    if(digitalRead(decreaseDurationPin) == 0) {
+    if(digitalRead(decreaseValuePin) == 0) {
         return true;
     } else {
         return false;
@@ -120,8 +123,16 @@ void testFireFlash(int flashDuration) {
     delay(2000);
 }
 
-bool testButtonPressed(void) {
-    if(digitalRead(flashTestPin) == 0) {
+bool scrollUpPressed(void) {
+    if(digitalRead(scrollUp) == 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool scrollDownPressed(void) {
+    if(digitalRead(scrollUp) == 0) {
         return true;
     } else {
         return false;
@@ -136,7 +147,11 @@ void loop ()
       flashDuration -= increment;
   }
 
-  if(testButtonPressed()) {
+  if(scrollUpPressed()) {
+      testFireFlash(flashDuration);
+  }
+
+    if(scrollDownPressed()) {
       testFireFlash(flashDuration);
   }
 
