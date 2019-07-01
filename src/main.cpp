@@ -5,28 +5,28 @@
                                       +-----+
          +----[PWR]-------------------| USB |--+
          |                            +-----+  |
-         |         GND/RST2  [ ][ ]            |
-         |       MOSI2/SCK2  [ ][ ]  A5/SCL[ ] |   C5 
-         |          5V/MISO2 [ ][ ]  A4/SDA[ ] |   C4 
+         |       GND/RST2  [ ][ ]              |
+         |     MOSI2/SCK2  [ ][ ] [C]A5/SCL[ ] |   C5 
+         |        5V/MISO2 [ ][ ] [C]A4/SDA[ ] |   C4 
          |                             AREF[ ] |
          |                              GND[ ] |
-         | [ ]N/C                    SCK/13[ ] |   B5
-         | [ ]IOREF                 MISO/12[ ] |   .
-         | [ ]RST                   MOSI/11[ ]~|   .
-         | [ ]3V3    +---+               10[ ]~|   .
-         | [ ]5v    -| A |-               9[ ]~|   .
-         | [ ]GND   -| R |-               8[ ] |   B0
+         | [ ]N/C                 [B]SCK/13[ ] |   B5
+         | [ ]IOREF              [B]MISO/12[ ] |   .
+         | [ ]RST                [B]MOSI/11[ ]~|   .
+         | [ ]3V3    +---+            [B]10[ ]~|   .
+         | [ ]5v    -| A |-            [B]9[ ]~|   .
+         | [ ]GND   -| R |-            [B]8[ ] |   B0
          | [ ]GND   -| D |-                    |
-         | [ ]Vin   -| U |-               7[ ] |   D7
-         |          -| I |-               6[ ]~|   .
-         | [ ]A0    -| N |-               5[ ]~|   .
-         | [ ]A1    -| O |-               4[ ] |   .
-         | [ ]A2     +---+           INT1/3[ ]~|   .
-         | [ ]A3                     INT0/2[ ] |   .
-         | [ ]A4/SDA  RST SCK MISO     TX>1[ ] |   .
-         | [ ]A5/SCL  [ ] [ ] [ ]      RX<0[ ] |   D0
-         |            [ ] [ ] [ ]              |
-         |  UNO_R3    GND MOSI 5V  ____________/
+         | [ ]Vin   -| U |-            [D]7[ ] |   D7
+         |          -| I |-            [D]6[ ]~|   .
+         | [ ]A0[C] -| N |-            [D]5[ ]~|   .
+         | [ ]A1[C] -| O |-            [D]4[ ] |   .
+         | [ ]A2[C]  +---+        [D]INT1/3[ ]~|   .
+         | [ ]A3[C]               [D]INT0/2[ ] |   .
+         | [ ]A4/SDA[C]             [D]TX>1[ ] |   .
+         | [ ]A5/SCL[C]             [D]RX<0[ ] |   D0
+         |          [Rs] [Sc] [Mi]             |
+         |  UNO_R3  [G]  [Mo] [5v] ____________/
           \_______________________/
 		  
 		  http://busyducks.com/ascii-art-arduinos
@@ -50,28 +50,31 @@ int scrollDown = 12;
 int increaseValuePin = 10;
 int decreaseValuePin = 9;
 int triggerPin = 3;
+int micPin = 13;
 
-void setup ()
-{
-  Serial.begin(9600);
-  pinMode(scrollUp, INPUT);
-  pinMode(increaseValuePin, INPUT);
-  pinMode(decreaseValuePin, INPUT);
-  pinMode(triggerPin, OUTPUT);
+// void setup ()
+// {
+//   Serial.begin(9600);
+//   pinMode(scrollUp, INPUT);
+//   pinMode(scrollDown, INPUT);
+//   pinMode(increaseValuePin, INPUT);
+//   pinMode(decreaseValuePin, INPUT);
+//   pinMode(micPin, OUTPUT);
+//   pinMode(triggerPin, OUTPUT);
 
-  if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
-    u8g.setColorIndex(255);     // white
-  }
-  else if ( u8g.getMode() == U8G_MODE_GRAY2BIT ) {
-    u8g.setColorIndex(3);         // max intensity
-  }
-  else if ( u8g.getMode() == U8G_MODE_BW ) {
-    u8g.setColorIndex(1);         // pixel on
-  }
-  else if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
-    u8g.setHiColorByRGB(255,255,255);
-  }
-}
+//   if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
+//     u8g.setColorIndex(255);     // white
+//   }
+//   else if ( u8g.getMode() == U8G_MODE_GRAY2BIT ) {
+//     u8g.setColorIndex(3);         // max intensity
+//   }
+//   else if ( u8g.getMode() == U8G_MODE_BW ) {
+//     u8g.setColorIndex(1);         // pixel on
+//   }
+//   else if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
+//     u8g.setHiColorByRGB(255,255,255);
+//   }
+// }
 
 void writeDisplay(int flashDuration) {
   u8g.setFont(u8g_font_unifont);
@@ -139,26 +142,56 @@ bool scrollDownPressed(void) {
     }
 }
 
-void loop ()
+// void loop ()
+// {
+//   if(increaseDuration() && notMaxDuration()) {
+//       flashDuration += increment;
+//   } else if(decreaseDuration() && notMinDuration()) {
+//       flashDuration -= increment;
+//   }
+
+//   if(scrollUpPressed()) {
+//       testFireFlash(flashDuration);
+//   }
+
+//     if(scrollDownPressed()) {
+//       testFireFlash(flashDuration);
+//   }
+
+//   u8g.firstPage();  
+//   do {
+//     writeDisplay(flashDuration);
+//   } while( u8g.nextPage() );
+
+//   delay(50);
+// }
+
+void setup()
 {
-  if(increaseDuration() && notMaxDuration()) {
-      flashDuration += increment;
-  } else if(decreaseDuration() && notMinDuration()) {
-      flashDuration -= increment;
-  }
+    Serial.begin(9600);
+    pinMode(9, INPUT);
+    pinMode(10, INPUT);
+    pinMode(11, INPUT);
+    pinMode(12, INPUT);
+}
 
-  if(scrollUpPressed()) {
-      testFireFlash(flashDuration);
-  }
+void loop() 
+{
+    if(digitalRead(9) == 0) {
+        Serial.println('9');
+    }
 
-    if(scrollDownPressed()) {
-      testFireFlash(flashDuration);
-  }
+    if(digitalRead(10) == 0) {
+        Serial.println('10');
+    }
+    
+    if(digitalRead(11) == 0) {
+        Serial.println('11');
+    }
 
-  u8g.firstPage();  
-  do {
-    writeDisplay(flashDuration);
-  } while( u8g.nextPage() );
+    if(digitalRead(12) == 0) {
+        Serial.println('12');
+    }
 
-  delay(50);
+    delay(50);
 }
