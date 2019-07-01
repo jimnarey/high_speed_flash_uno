@@ -46,35 +46,35 @@ int increment = 100;
 
 
 int scrollUp = 11;
-int scrollDown = 12;
+int scrollDown = 9;
 int increaseValuePin = 10;
-int decreaseValuePin = 9;
+int decreaseValuePin = 12;
 int triggerPin = 3;
 int micPin = 13;
 
-// void setup ()
-// {
-//   Serial.begin(9600);
-//   pinMode(scrollUp, INPUT);
-//   pinMode(scrollDown, INPUT);
-//   pinMode(increaseValuePin, INPUT);
-//   pinMode(decreaseValuePin, INPUT);
-//   pinMode(micPin, OUTPUT);
-//   pinMode(triggerPin, OUTPUT);
+void setup ()
+{
+  Serial.begin(9600);
+  pinMode(scrollUp, INPUT);
+  pinMode(scrollDown, INPUT);
+  pinMode(increaseValuePin, INPUT);
+  pinMode(decreaseValuePin, INPUT);
+  pinMode(micPin, OUTPUT);
+  pinMode(triggerPin, OUTPUT);
 
-//   if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
-//     u8g.setColorIndex(255);     // white
-//   }
-//   else if ( u8g.getMode() == U8G_MODE_GRAY2BIT ) {
-//     u8g.setColorIndex(3);         // max intensity
-//   }
-//   else if ( u8g.getMode() == U8G_MODE_BW ) {
-//     u8g.setColorIndex(1);         // pixel on
-//   }
-//   else if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
-//     u8g.setHiColorByRGB(255,255,255);
-//   }
-// }
+  if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
+    u8g.setColorIndex(255);     // white
+  }
+  else if ( u8g.getMode() == U8G_MODE_GRAY2BIT ) {
+    u8g.setColorIndex(3);         // max intensity
+  }
+  else if ( u8g.getMode() == U8G_MODE_BW ) {
+    u8g.setColorIndex(1);         // pixel on
+  }
+  else if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
+    u8g.setHiColorByRGB(255,255,255);
+  }
+}
 
 void writeDisplay(int flashDuration) {
   u8g.setFont(u8g_font_unifont);
@@ -135,63 +135,63 @@ bool scrollUpPressed(void) {
 }
 
 bool scrollDownPressed(void) {
-    if(digitalRead(scrollUp) == 0) {
+    if(digitalRead(scrollDown) == 0) {
         return true;
     } else {
         return false;
     }
 }
 
-// void loop ()
+void loop ()
+{
+  if(increaseDuration() && notMaxDuration()) {
+      flashDuration += increment;
+  } else if(decreaseDuration() && notMinDuration()) {
+      flashDuration -= increment;
+  }
+
+  if(scrollUpPressed()) {
+      testFireFlash(flashDuration);
+  }
+
+  if(scrollDownPressed()) {
+      testFireFlash(flashDuration);
+  }
+
+  u8g.firstPage();  
+  do {
+    writeDisplay(flashDuration);
+  } while( u8g.nextPage() );
+
+  delay(50);
+}
+
+// void setup()
 // {
-//   if(increaseDuration() && notMaxDuration()) {
-//       flashDuration += increment;
-//   } else if(decreaseDuration() && notMinDuration()) {
-//       flashDuration -= increment;
-//   }
-
-//   if(scrollUpPressed()) {
-//       testFireFlash(flashDuration);
-//   }
-
-//     if(scrollDownPressed()) {
-//       testFireFlash(flashDuration);
-//   }
-
-//   u8g.firstPage();  
-//   do {
-//     writeDisplay(flashDuration);
-//   } while( u8g.nextPage() );
-
-//   delay(50);
+//     Serial.begin(9600);
+//     pinMode(9, INPUT);
+//     pinMode(10, INPUT);
+//     pinMode(11, INPUT);
+//     pinMode(12, INPUT);
 // }
 
-void setup()
-{
-    Serial.begin(9600);
-    pinMode(9, INPUT);
-    pinMode(10, INPUT);
-    pinMode(11, INPUT);
-    pinMode(12, INPUT);
-}
+// void loop() 
+// {
+//     if(digitalRead(9) == 0) {
+//         Serial.println(9);
+//     }
 
-void loop() 
-{
-    if(digitalRead(9) == 0) {
-        Serial.println('9');
-    }
-
-    if(digitalRead(10) == 0) {
-        Serial.println('10');
-    }
+//     if(digitalRead(10) == 0) {
+//         Serial.println(10);
+//     }
     
-    if(digitalRead(11) == 0) {
-        Serial.println('11');
-    }
+//     if(digitalRead(11) == 0) {
+//         Serial.println(11);
+//     }
 
-    if(digitalRead(12) == 0) {
-        Serial.println('12');
-    }
+//     if(digitalRead(12) == 0) {
+//         Serial.println(12);
+//     }
 
-    delay(50);
-}
+//     delay(50);
+// }
