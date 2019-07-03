@@ -35,163 +35,220 @@
 
 #include <Arduino.h>
 #include <U8glib.h>
+#include <Microdelay.h>
 
 U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE); // Just for 0.91”(128*32)
 // U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE|U8G_I2C_OPT_DEV_0);// for 0.96” and 1.3”
 
-int flashDuration = 100;
-int maxFlashDuration = 10000;
-int minFlashDuration = 100;
-int increment = 100;
+int flashDuration = 10;
 
+// Consider changing all from int to byte
+const int maxFlashDuration = 100;
+const int minFlashDuration = 1;
+const int durationIncrement = 1;
 
-int scrollUp = 11;
-int scrollDown = 9;
-int increaseValuePin = 10;
-int decreaseValuePin = 12;
-int triggerPin = 3;
-int micPin = 13;
+const int scrollUpPin = 11;
+const int scrollDown = 9;
+const int increaseValuePin = 10;
+const int decreaseValuePin = 12;
+const int triggerPin = 3;
+const int micPin = 13;
 
-void setup ()
+void setup()
 {
-  Serial.begin(9600);
-  pinMode(scrollUp, INPUT);
-  pinMode(scrollDown, INPUT);
-  pinMode(increaseValuePin, INPUT);
-  pinMode(decreaseValuePin, INPUT);
-  pinMode(micPin, OUTPUT);
-  pinMode(triggerPin, OUTPUT);
+    Serial.begin(9600);
+    pinMode(scrollUpPin, INPUT);
+    pinMode(scrollDown, INPUT);
+    pinMode(increaseValuePin, INPUT);
+    pinMode(decreaseValuePin, INPUT);
+    pinMode(micPin, OUTPUT);
+    pinMode(triggerPin, OUTPUT);
 
-  if ( u8g.getMode() == U8G_MODE_R3G3B2 ) {
-    u8g.setColorIndex(255);     // white
-  }
-  else if ( u8g.getMode() == U8G_MODE_GRAY2BIT ) {
-    u8g.setColorIndex(3);         // max intensity
-  }
-  else if ( u8g.getMode() == U8G_MODE_BW ) {
-    u8g.setColorIndex(1);         // pixel on
-  }
-  else if ( u8g.getMode() == U8G_MODE_HICOLOR ) {
-    u8g.setHiColorByRGB(255,255,255);
-  }
+    if (u8g.getMode() == U8G_MODE_R3G3B2)
+    {
+        u8g.setColorIndex(255); // white
+    }
+    else if (u8g.getMode() == U8G_MODE_GRAY2BIT)
+    {
+        u8g.setColorIndex(3); // max intensity
+    }
+    else if (u8g.getMode() == U8G_MODE_BW)
+    {
+        u8g.setColorIndex(1); // pixel on
+    }
+    else if (u8g.getMode() == U8G_MODE_HICOLOR)
+    {
+        u8g.setHiColorByRGB(255, 255, 255);
+    }
 }
 
-void writeDisplay(int flashDuration) {
-  u8g.setFont(u8g_font_unifont);
-  u8g.setPrintPos(0, 10);
-  u8g.print(flashDuration);
+// Display
+
+void writeDisplay(int flashDuration)
+{
+    u8g.setFont(u8g_font_unifont);
+    u8g.setPrintPos(0, 10);
+    u8g.print(flashDuration);
 }
 
-bool increaseDuration(void) {
-    if(digitalRead(increaseValuePin) == 0) {
+// Poll for button presses
+
+bool increaseValue(void)
+{
+    if (digitalRead(increaseValuePin) == 0)
+    {
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     };
 }
 
-bool decreaseDuration(void) {
-    if(digitalRead(decreaseValuePin) == 0) {
+bool decreaseValue(void)
+{
+    if (digitalRead(decreaseValuePin) == 0)
+    {
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     };
 }
 
-bool notMaxDuration(void) {
-    if(flashDuration < maxFlashDuration) {
+bool scrollUpPinPressed(void)
+{
+    if (digitalRead(scrollUpPin) == 0)
+    {
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
 
-bool notMinDuration(void) {
-    if(flashDuration > minFlashDuration) {
+bool scrollDownPressed(void)
+{
+    if (digitalRead(scrollDown) == 0)
+    {
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
 
-void testFireFlash(int flashDuration) {
+// Validate duration input
+
+bool notMaxDuration(void)
+{
+    if (flashDuration < maxFlashDuration)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool notMinDuration(void)
+{
+    if (flashDuration > minFlashDuration)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// Fire Flash
+
+void fireFlash1us()
+{
     digitalWrite(triggerPin, HIGH);
-    asm("nop");
-    asm("nop");
-    asm("nop");
-    asm("nop");
-    asm("nop");
-    // delay(flashDuration);
+    delay1us();
     digitalWrite(triggerPin, LOW);
     delay(2000);
 }
 
-bool scrollUpPressed(void) {
-    if(digitalRead(scrollUp) == 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool scrollDownPressed(void) {
-    if(digitalRead(scrollDown) == 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-void loop ()
+void fireFlash2us()
 {
-  if(increaseDuration() && notMaxDuration()) {
-      flashDuration += increment;
-  } else if(decreaseDuration() && notMinDuration()) {
-      flashDuration -= increment;
-  }
-
-  if(scrollUpPressed()) {
-      testFireFlash(flashDuration);
-  }
-
-  if(scrollDownPressed()) {
-      testFireFlash(flashDuration);
-  }
-
-  u8g.firstPage();  
-  do {
-    writeDisplay(flashDuration);
-  } while( u8g.nextPage() );
-
-  delay(50);
+    digitalWrite(triggerPin, HIGH);
+    delay2us();
+    digitalWrite(triggerPin, LOW);
+    delay(2000);
 }
 
-// void setup()
-// {
-//     Serial.begin(9600);
-//     pinMode(9, INPUT);
-//     pinMode(10, INPUT);
-//     pinMode(11, INPUT);
-//     pinMode(12, INPUT);
-// }
+void fireFlash3us()
+{
+    digitalWrite(triggerPin, HIGH);
+    delay3us();
+    digitalWrite(triggerPin, LOW);
+    delay(2000);
+}
 
-// void loop() 
-// {
-//     if(digitalRead(9) == 0) {
-//         Serial.println(9);
-//     }
+void fireFlashFor(int flashDuration)
+{
+    digitalWrite(triggerPin, HIGH);
+    delayMicroseconds(flashDuration);
+    digitalWrite(triggerPin, LOW);
+}
 
-//     if(digitalRead(10) == 0) {
-//         Serial.println(10);
-//     }
-    
-//     if(digitalRead(11) == 0) {
-//         Serial.println(11);
-//     }
+void fireFlash(int flashDuration)
+{
+    if (flashDuration == 1)
+    {
+        fireFlash1us();
+    }
+    else if (flashDuration == 2)
+    {
+        fireFlash2us();
+    }
+    else if (flashDuration == 3)
+    {
+        fireFlash3us();
+    }
+    else
+    {
+        fireFlashFor(flashDuration);
+    }
+}
 
-//     if(digitalRead(12) == 0) {
-//         Serial.println(12);
-//     }
+void loop()
+{
+    if (increaseValue() && notMaxDuration())
+    {
+        flashDuration += durationIncrement;
+    }
+    else if (decreaseValue() && notMinDuration())
+    {
+        flashDuration -= durationIncrement;
+    }
 
-//     delay(50);
-// }
+    if (scrollUpPinPressed())
+    {
+        fireFlash(flashDuration);
+    }
+
+    if (scrollDownPressed())
+    {
+        fireFlash(flashDuration);
+    }
+
+    u8g.firstPage();
+    do
+    {
+        writeDisplay(flashDuration);
+    } while (u8g.nextPage());
+
+    delayMicroseconds(50000);
+    // _delay_us(50000);
+
+    // delay(50);
+}
