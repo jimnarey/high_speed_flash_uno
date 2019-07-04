@@ -1,8 +1,15 @@
 #ifndef Microdelay_h
 #define Microdelay_h
 
-void delay1us();
-void delay2us();
-void delay3us();
+#include <Arduino.h>
+
+class Microdelay
+{
+  public:
+    Microdelay();
+    static void delay1us();
+    static void delay2us();
+    static void delay3us();
+};
 
 #endif

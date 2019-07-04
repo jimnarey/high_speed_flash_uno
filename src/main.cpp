@@ -54,6 +54,8 @@ const int decreaseValuePin = 12;
 const int triggerPin = 3;
 const int micPin = 13;
 
+// Microdelay microDelay;
+
 void setup()
 {
     Serial.begin(9600);
@@ -172,7 +174,7 @@ bool notMinDuration(void)
 void fireFlash1us()
 {
     digitalWrite(triggerPin, HIGH);
-    delay1us();
+    Microdelay::delay1us();
     digitalWrite(triggerPin, LOW);
     delay(2000);
 }
@@ -180,7 +182,7 @@ void fireFlash1us()
 void fireFlash2us()
 {
     digitalWrite(triggerPin, HIGH);
-    delay2us();
+    Microdelay::delay2us();
     digitalWrite(triggerPin, LOW);
     delay(2000);
 }
@@ -188,7 +190,7 @@ void fireFlash2us()
 void fireFlash3us()
 {
     digitalWrite(triggerPin, HIGH);
-    delay3us();
+    Microdelay::delay3us();
     digitalWrite(triggerPin, LOW);
     delay(2000);
 }
@@ -198,6 +200,7 @@ void fireFlashFor(int flashDuration)
     digitalWrite(triggerPin, HIGH);
     delayMicroseconds(flashDuration);
     digitalWrite(triggerPin, LOW);
+    delay(2000);
 }
 
 void fireFlash(int flashDuration)
