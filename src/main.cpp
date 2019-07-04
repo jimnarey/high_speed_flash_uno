@@ -48,7 +48,7 @@ const int minFlashDuration = 1;
 const int durationIncrement = 1;
 
 const int scrollUpPin = 11;
-const int scrollDown = 9;
+const int scrollDownPin = 9;
 const int increaseValuePin = 10;
 const int decreaseValuePin = 12;
 const int triggerPin = 3;
@@ -60,7 +60,7 @@ void setup()
 {
     Serial.begin(9600);
     pinMode(scrollUpPin, INPUT);
-    pinMode(scrollDown, INPUT);
+    pinMode(scrollDownPin, INPUT);
     pinMode(increaseValuePin, INPUT);
     pinMode(decreaseValuePin, INPUT);
     pinMode(micPin, OUTPUT);
@@ -119,7 +119,7 @@ bool decreaseValue(void)
     };
 }
 
-bool scrollUpPinPressed(void)
+bool scrollUp(void)
 {
     if (digitalRead(scrollUpPin) == 0)
     {
@@ -131,9 +131,9 @@ bool scrollUpPinPressed(void)
     }
 }
 
-bool scrollDownPressed(void)
+bool scrollDown(void)
 {
-    if (digitalRead(scrollDown) == 0)
+    if (digitalRead(scrollDownPin) == 0)
     {
         return true;
     }
@@ -234,12 +234,12 @@ void loop()
         flashDuration -= durationIncrement;
     }
 
-    if (scrollUpPinPressed())
+    if (scrollUp())
     {
         fireFlash(flashDuration);
     }
 
-    if (scrollDownPressed())
+    if (scrollDown())
     {
         fireFlash(flashDuration);
     }
@@ -248,7 +248,8 @@ void loop()
     do
     {
         writeDisplay(flashDuration);
-    } while (u8g.nextPage());
+    } 
+    while (u8g.nextPage());
 
     delayMicroseconds(50000);
     // _delay_us(50000);
