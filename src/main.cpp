@@ -41,8 +41,6 @@ U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE); // Just for 0.91”(128*32)
 // U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE|U8G_I2C_OPT_DEV_0);// for 0.96” and 1.3”
 
 byte flashDuration = 10;
-
-// Consider changing all from int to byte
 const byte maxFlashDuration = 100;
 const byte minFlashDuration = 1;
 const byte durationIncrement = 1;
