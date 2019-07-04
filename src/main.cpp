@@ -40,19 +40,19 @@
 U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE); // Just for 0.91”(128*32)
 // U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE|U8G_I2C_OPT_DEV_0);// for 0.96” and 1.3”
 
-int flashDuration = 10;
+byte flashDuration = 10;
 
 // Consider changing all from int to byte
-const int maxFlashDuration = 100;
-const int minFlashDuration = 1;
-const int durationIncrement = 1;
+const byte maxFlashDuration = 100;
+const byte minFlashDuration = 1;
+const byte durationIncrement = 1;
 
-const int scrollUpPin = 11;
-const int scrollDownPin = 9;
-const int increaseValuePin = 10;
-const int decreaseValuePin = 12;
-const int triggerPin = 3;
-const int micPin = 13;
+const byte scrollUpPin = 11;
+const byte scrollDownPin = 9;
+const byte increaseValuePin = 10;
+const byte decreaseValuePin = 12;
+const byte triggerPin = 3;
+const byte micPin = 13;
 
 // Microdelay microDelay;
 
@@ -86,7 +86,7 @@ void setup()
 
 // Display
 
-void writeDisplay(int flashDuration)
+void writeDisplay(byte flashDuration)
 {
     u8g.setFont(u8g_font_unifont);
     u8g.setPrintPos(0, 10);
@@ -195,7 +195,7 @@ void fireFlash3us()
     delay(2000);
 }
 
-void fireFlashFor(int flashDuration)
+void fireFlashFor(byte flashDuration)
 {
     digitalWrite(triggerPin, HIGH);
     delayMicroseconds(flashDuration);
@@ -203,7 +203,7 @@ void fireFlashFor(int flashDuration)
     delay(2000);
 }
 
-void fireFlash(int flashDuration)
+void fireFlash(byte flashDuration)
 {
     if (flashDuration == 1)
     {
@@ -252,7 +252,5 @@ void loop()
     while (u8g.nextPage());
 
     delayMicroseconds(50000);
-    // _delay_us(50000);
-
-    // delay(50);
 }
+
