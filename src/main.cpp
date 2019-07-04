@@ -36,6 +36,7 @@
 #include <Arduino.h>
 #include <U8glib.h>
 #include <Microdelay.h>
+#include <Buttons.h>
 
 U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE); // Just for 0.91”(128*32)
 // U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE|U8G_I2C_OPT_DEV_0);// for 0.96” and 1.3”
@@ -45,22 +46,24 @@ const byte maxFlashDuration = 100;
 const byte minFlashDuration = 1;
 const byte durationIncrement = 1;
 
-const byte scrollUpPin = 11;
-const byte scrollDownPin = 9;
-const byte increaseValuePin = 10;
-const byte decreaseValuePin = 12;
+// const byte scrollUpPin = 11;
+// const byte scrollDownPin = 9;
+// const byte increaseValuePin = 10;
+// const byte decreaseValuePin = 12;
 const byte triggerPin = 3;
 const byte micPin = 13;
 
-// Microdelay microDelay;
+// Pass pins for scrollUp, scrollDown, increaseValue, decreaseValue
+// Buttons buttons = Buttons(11, 9, 10, 12);
 
 void setup()
 {
     Serial.begin(9600);
-    pinMode(scrollUpPin, INPUT);
-    pinMode(scrollDownPin, INPUT);
-    pinMode(increaseValuePin, INPUT);
-    pinMode(decreaseValuePin, INPUT);
+    Buttons::init();
+    // pinMode(scrollUpPin, INPUT);
+    // pinMode(scrollDownPin, INPUT);
+    // pinMode(increaseValuePin, INPUT);
+    // pinMode(decreaseValuePin, INPUT);
     pinMode(micPin, OUTPUT);
     pinMode(triggerPin, OUTPUT);
 
@@ -93,53 +96,53 @@ void writeDisplay(byte flashDuration)
 
 // Poll for button presses
 
-bool increaseValue(void)
-{
-    if (digitalRead(increaseValuePin) == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    };
-}
+// bool increaseValue(void)
+// {
+//     if (digitalRead(increaseValuePin) == 0)
+//     {
+//         return true;
+//     }
+//     else
+//     {
+//         return false;
+//     };
+// }
 
-bool decreaseValue(void)
-{
-    if (digitalRead(decreaseValuePin) == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    };
-}
+// bool decreaseValue(void)
+// {
+//     if (digitalRead(decreaseValuePin) == 0)
+//     {
+//         return true;
+//     }
+//     else
+//     {
+//         return false;
+//     };
+// }
 
-bool scrollUp(void)
-{
-    if (digitalRead(scrollUpPin) == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
+// bool scrollUp(void)
+// {
+//     if (digitalRead(scrollUpPin) == 0)
+//     {
+//         return true;
+//     }
+//     else
+//     {
+//         return false;
+//     }
+// }
 
-bool scrollDown(void)
-{
-    if (digitalRead(scrollDownPin) == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
+// bool scrollDown(void)
+// {
+//     if (digitalRead(scrollDownPin) == 0)
+//     {
+//         return true;
+//     }
+//     else
+//     {
+//         return false;
+//     }
+// }
 
 // Validate duration input
 
@@ -223,21 +226,21 @@ void fireFlash(byte flashDuration)
 
 void loop()
 {
-    if (increaseValue() && notMaxDuration())
+    if (Buttons::increaseValue() && notMaxDuration())
     {
         flashDuration += durationIncrement;
     }
-    else if (decreaseValue() && notMinDuration())
+    else if (Buttons::decreaseValue() && notMinDuration())
     {
         flashDuration -= durationIncrement;
     }
 
-    if (scrollUp())
+    if (Buttons::scrollUp())
     {
         fireFlash(flashDuration);
     }
 
-    if (scrollDown())
+    if (Buttons::scrollDown())
     {
         fireFlash(flashDuration);
     }

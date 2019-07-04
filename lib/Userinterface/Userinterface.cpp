@@ -6,11 +6,6 @@ Screen::Screen()
 
 }
 
-Buttons::Buttons()
-{
-
-}
-
 Userinterface::Userinterface()
 {
 
