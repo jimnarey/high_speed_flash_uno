@@ -35,8 +35,9 @@
 
 #include <Arduino.h>
 #include <U8glib.h>
-#include <Microdelay.h>
+// #include <Microdelay.h>
 #include <Buttons.h>
+#include <Fireflash.h>
 
 U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE); // Just for 0.91”(128*32)
 // U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE|U8G_I2C_OPT_DEV_0);// for 0.96” and 1.3”
@@ -45,15 +46,16 @@ byte flashDuration = 10;
 const byte maxFlashDuration = 100;
 const byte minFlashDuration = 1;
 const byte durationIncrement = 1;
-const byte triggerPin = 3;
+// const byte triggerPin = 3;
 const byte micPin = 13;
 
 void setup()
 {
     Serial.begin(9600);
     Buttons::init();
+    Fireflash::init();
     pinMode(micPin, OUTPUT);
-    pinMode(triggerPin, OUTPUT);
+    // pinMode(triggerPin, OUTPUT);
 
     if (u8g.getMode() == U8G_MODE_R3G3B2)
     {
@@ -110,57 +112,57 @@ bool notMinDuration(void)
 
 // Fire Flash
 
-void fireFlash1us()
-{
-    digitalWrite(triggerPin, HIGH);
-    Microdelay::delay1us();
-    digitalWrite(triggerPin, LOW);
-    delay(2000);
-}
+// void fireFlash1us()
+// {
+//     digitalWrite(triggerPin, HIGH);
+//     Microdelay::delay1us();
+//     digitalWrite(triggerPin, LOW);
+//     delay(2000);
+// }
 
-void fireFlash2us()
-{
-    digitalWrite(triggerPin, HIGH);
-    Microdelay::delay2us();
-    digitalWrite(triggerPin, LOW);
-    delay(2000);
-}
+// void fireFlash2us()
+// {
+//     digitalWrite(triggerPin, HIGH);
+//     Microdelay::delay2us();
+//     digitalWrite(triggerPin, LOW);
+//     delay(2000);
+// }
 
-void fireFlash3us()
-{
-    digitalWrite(triggerPin, HIGH);
-    Microdelay::delay3us();
-    digitalWrite(triggerPin, LOW);
-    delay(2000);
-}
+// void fireFlash3us()
+// {
+//     digitalWrite(triggerPin, HIGH);
+//     Microdelay::delay3us();
+//     digitalWrite(triggerPin, LOW);
+//     delay(2000);
+// }
 
-void fireFlashFor(byte flashDuration)
-{
-    digitalWrite(triggerPin, HIGH);
-    delayMicroseconds(flashDuration);
-    digitalWrite(triggerPin, LOW);
-    delay(2000);
-}
+// void fireFlashFor(byte flashDuration)
+// {
+//     digitalWrite(triggerPin, HIGH);
+//     delayMicroseconds(flashDuration);
+//     digitalWrite(triggerPin, LOW);
+//     delay(2000);
+// }
 
-void fireFlash(byte flashDuration)
-{
-    if (flashDuration == 1)
-    {
-        fireFlash1us();
-    }
-    else if (flashDuration == 2)
-    {
-        fireFlash2us();
-    }
-    else if (flashDuration == 3)
-    {
-        fireFlash3us();
-    }
-    else
-    {
-        fireFlashFor(flashDuration);
-    }
-}
+// void fireFlash(byte flashDuration)
+// {
+//     if (flashDuration == 1)
+//     {
+//         fireFlash1us();
+//     }
+//     else if (flashDuration == 2)
+//     {
+//         fireFlash2us();
+//     }
+//     else if (flashDuration == 3)
+//     {
+//         fireFlash3us();
+//     }
+//     else
+//     {
+//         fireFlashFor(flashDuration);
+//     }
+// }
 
 void loop()
 {
@@ -175,12 +177,12 @@ void loop()
 
     if (Buttons::scrollUp())
     {
-        fireFlash(flashDuration);
+        Fireflash::fireFlash(flashDuration);
     }
 
     if (Buttons::scrollDown())
     {
-        fireFlash(flashDuration);
+        Fireflash::fireFlash(flashDuration);
     }
 
     u8g.firstPage();

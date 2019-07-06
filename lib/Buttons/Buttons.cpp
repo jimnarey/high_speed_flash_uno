@@ -2,19 +2,6 @@
 #include <Buttons.h>
 
 
-// Buttons::Buttons(byte scrollUpPin, byte scrollDownPin, byte increaseValuePin, byte decreaseValuePin)
-// Buttons::Buttons()
-// {
-    // _scrollUpPin = scrollUpPin;
-    // _scrollDownPin = scrollDownPin;
-    // _increaseValuePin = increaseValuePin;
-    // _decreaseValuePin = decreaseValuePin;
-    // pinMode(_scrollUpPin, INPUT);
-    // pinMode(_scrollDownPin, INPUT);
-    // pinMode(_increaseValuePin, INPUT);
-    // pinMode(_decreaseValuePin, INPUT);
-// }
-
 byte const Buttons::_scrollUpPin = 11;
 byte const Buttons::_scrollDownPin = 9;
 byte const Buttons::_increaseValuePin = 10;

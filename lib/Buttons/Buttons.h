@@ -3,8 +3,6 @@
 class Buttons
 {
     public:
-        // Buttons(byte scrollUpPin, byte scrollDownPin, byte increaseValuePin, byte decreaseValuePin);
-        // Buttons();
         static void init();
         static bool scrollUp(void);
         static bool scrollDown(void);
