@@ -7,12 +7,6 @@
 // 2 cycles to push each 8bit register from the CPU to memory and assume this happens for every byte passed as arguments
 // 2 cycles to pull each saved byte from memory back to CPU registers
 
-
-Microdelay::Microdelay()
-{
-
-}
-
 void Microdelay::delay1us()
 {
 // 4 assumed cyles to call + 12
