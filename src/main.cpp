@@ -45,25 +45,13 @@ byte flashDuration = 10;
 const byte maxFlashDuration = 100;
 const byte minFlashDuration = 1;
 const byte durationIncrement = 1;
-
-// const byte scrollUpPin = 11;
-// const byte scrollDownPin = 9;
-// const byte increaseValuePin = 10;
-// const byte decreaseValuePin = 12;
 const byte triggerPin = 3;
 const byte micPin = 13;
-
-// Pass pins for scrollUp, scrollDown, increaseValue, decreaseValue
-// Buttons buttons = Buttons(11, 9, 10, 12);
 
 void setup()
 {
     Serial.begin(9600);
     Buttons::init();
-    // pinMode(scrollUpPin, INPUT);
-    // pinMode(scrollDownPin, INPUT);
-    // pinMode(increaseValuePin, INPUT);
-    // pinMode(decreaseValuePin, INPUT);
     pinMode(micPin, OUTPUT);
     pinMode(triggerPin, OUTPUT);
 
@@ -93,56 +81,6 @@ void writeDisplay(byte flashDuration)
     u8g.setPrintPos(0, 10);
     u8g.print(flashDuration);
 }
-
-// Poll for button presses
-
-// bool increaseValue(void)
-// {
-//     if (digitalRead(increaseValuePin) == 0)
-//     {
-//         return true;
-//     }
-//     else
-//     {
-//         return false;
-//     };
-// }
-
-// bool decreaseValue(void)
-// {
-//     if (digitalRead(decreaseValuePin) == 0)
-//     {
-//         return true;
-//     }
-//     else
-//     {
-//         return false;
-//     };
-// }
-
-// bool scrollUp(void)
-// {
-//     if (digitalRead(scrollUpPin) == 0)
-//     {
-//         return true;
-//     }
-//     else
-//     {
-//         return false;
-//     }
-// }
-
-// bool scrollDown(void)
-// {
-//     if (digitalRead(scrollDownPin) == 0)
-//     {
-//         return true;
-//     }
-//     else
-//     {
-//         return false;
-//     }
-// }
 
 // Validate duration input
 
