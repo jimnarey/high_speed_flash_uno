@@ -37,8 +37,7 @@
 #include <U8glib.h>
 #include <Buttons.h>
 #include <Fireflash.h>
-// #include <Display.h>
-#include <DisplayU8g2.h>
+#include <Display.h>
 
 
 byte flashDuration = 10;
