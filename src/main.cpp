@@ -38,12 +38,13 @@
 #include <Buttons.h>
 #include <Fireflash.h>
 #include <Display.h>
+#include <Settings.h>
 
 
-byte flashDuration = 10;
-const byte maxFlashDuration = 100;
-const byte minFlashDuration = 1;
-const byte durationIncrement = 1;
+// byte flashDuration = 10;
+// const byte maxFlashDuration = 100;
+// const byte minFlashDuration = 1;
+// const byte durationIncrement = 1;
 const byte micPin = 13;
 
 void setup()
@@ -57,7 +58,7 @@ void setup()
 
 bool notMaxDuration(void)
 {
-    if (flashDuration < maxFlashDuration)
+    if (Settings::flashDuration < Settings::maxFlashDuration)
     {
         return true;
     }
@@ -69,7 +70,7 @@ bool notMaxDuration(void)
 
 bool notMinDuration(void)
 {
-    if (flashDuration > minFlashDuration)
+    if (Settings::flashDuration > Settings::minFlashDuration)
     {
         return true;
     }
@@ -83,24 +84,24 @@ void loop()
 {
     if (Buttons::increaseValue() && notMaxDuration())
     {
-        flashDuration += durationIncrement;
+        Settings::flashDuration += Settings::durationIncrement;
     }
     else if (Buttons::decreaseValue() && notMinDuration())
     {
-        flashDuration -= durationIncrement;
+        Settings::flashDuration -= Settings::durationIncrement;
     }
 
     if (Buttons::scrollUp())
     {
-        Fireflash::fireFlash(flashDuration);
+        Fireflash::fireFlash(Settings::flashDuration);
     }
 
     if (Buttons::scrollDown())
     {
-        Fireflash::fireFlash(flashDuration);
+        Fireflash::fireFlash(Settings::flashDuration);
     }
 
-    Display::refreshDisplay(flashDuration);
+    Display::refreshDisplay(Settings::flashDuration);
 
     delayMicroseconds(50000);
 }
