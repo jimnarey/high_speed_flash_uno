@@ -41,10 +41,6 @@
 #include <Settings.h>
 
 
-// byte flashDuration = 10;
-// const byte maxFlashDuration = 100;
-// const byte minFlashDuration = 1;
-// const byte durationIncrement = 1;
 const byte micPin = 13;
 
 void setup()
@@ -56,37 +52,13 @@ void setup()
     Display::init();
 }
 
-bool notMaxDuration(void)
-{
-    if (Settings::flashDuration < Settings::maxFlashDuration)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-bool notMinDuration(void)
-{
-    if (Settings::flashDuration > Settings::minFlashDuration)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 void loop()
 {
-    if (Buttons::increaseValue() && notMaxDuration())
+    if (Buttons::increaseValue() && Settings::notMaxDuration())
     {
         Settings::flashDuration += Settings::durationIncrement;
     }
-    else if (Buttons::decreaseValue() && notMinDuration())
+    else if (Buttons::decreaseValue() && Settings::notMinDuration())
     {
         Settings::flashDuration -= Settings::durationIncrement;
     }
