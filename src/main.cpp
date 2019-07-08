@@ -40,6 +40,10 @@
 #include <Display.h>
 #include <Settings.h>
 
+struct screen {
+  char caption[12];
+  byte currentVal;
+} durationScreen, delayScreen;
 
 const byte micPin = 13;
 
@@ -48,8 +52,9 @@ void setup()
     Serial.begin(9600);
     Buttons::init();
     Fireflash::init();
-    pinMode(micPin, OUTPUT);
     Display::init();
+
+    pinMode(micPin, OUTPUT);
 }
 
 void loop()
